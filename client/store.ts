@@ -12,7 +12,8 @@ const store = new Vuex.Store({
     filter: null, // Username to filter shown freets by (null = show all)
     freets: [], // All freets created in the app
     username: null, // Username of the logged in user
-    alerts: {} // global success/error messages encountered during submissions to non-visible forms
+    alerts: {}, // global success/error messages encountered during submissions to non-visible forms
+    circles: [], // All circles created in the app
   },
   mutations: {
     alert(state, payload) {
@@ -50,6 +51,21 @@ const store = new Vuex.Store({
        * Request the server for the currently available freets.
        */
       const url = state.filter ? `/api/users/${state.filter}/freets` : '/api/freets';
+      const res = await fetch(url).then(async r => r.json());
+      state.freets = res;
+    },
+    updateCircles(state, circles) {
+      /**
+       * Update the stored circles to the provided circles.
+       * @param circles - Circles to store
+       */
+      state.circles = circles;
+    },
+    async refreshCircles(state) {
+      /**
+       * Request the server for the currently available circles.
+       */
+      const url = state.filter ? `/api/users/${state.filter}/circles` : '/api/circles';
       const res = await fetch(url).then(async r => r.json());
       state.freets = res;
     }

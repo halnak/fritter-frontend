@@ -25,6 +25,28 @@
       <header>
         <div class="left">
           <h2>
+            Viewing all circles
+            <span v-if="$store.state.filter">
+              by @{{ $store.state.filter }}
+            </span>
+          </h2>
+        </div>
+      <section
+        v-if="$store.state.circles.length"
+      >
+        <CircleComponent
+          v-for="circle in $store.state.circles"
+          :key="circle.id"
+          :circle="circle"
+        />
+      </section>
+      <article
+        v-else
+      >
+        <h3>No Circles found.</h3>
+      </article>
+        <div class="left">
+          <h2>
             Viewing all freets
             <span v-if="$store.state.filter">
               by @{{ $store.state.filter }}
@@ -37,6 +59,11 @@
             value="author"
             placeholder="🔍 Filter by author (optional)"
             button="🔄 Get freets"
+          />
+          <GetCirclesForm
+            ref="getCirclesForm"
+            value="owner"
+            button="🔄 Get circles"
           />
         </div>
       </header>

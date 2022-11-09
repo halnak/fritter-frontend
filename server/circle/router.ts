@@ -70,7 +70,6 @@ const router = express.Router();
  * @name POST /api/circles
  *
  * @param {string} name - name of circle
- * @param {string} owner - username of creator
  * @return {CircleResponse} - The created circle
  * @throws {403} - If the user is not logged in
  *
@@ -78,11 +77,11 @@ const router = express.Router();
 router.post(
   '/',
   [
-    // userValidator.isUserLoggedIn,
+    userValidator.isUserLoggedIn
   ],
   async (req: Request, res: Response) => {
-    const user = await UserCollection.findOneByUsername(req.body.owner);
-    const circle = await CircleCollection.addOne(req.body.name, user.id);
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    const circle = await CircleCollection.addOne(req.body.name, userId);
     res.status(201).json({
       message: `Your circle was created successfully.`,
       user: util.constructCircleResponse(circle)

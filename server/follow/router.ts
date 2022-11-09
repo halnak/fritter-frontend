@@ -1,6 +1,6 @@
 import type {NextFunction, Request, Response} from 'express';
 import express from 'express';
-import UserCollection from 'user/collection';
+import UserCollection from '../user/collection';
 import FreetCollection from '../freet/collection';
 import FollowCollection from './collection';
 import * as followValidator from './middleware';

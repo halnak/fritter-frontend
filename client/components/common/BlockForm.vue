@@ -117,35 +117,42 @@ export default {
 
 <style scoped>
 form {
-  border: 1px solid #111;
+  border: 1px solid #e9fac8;
+  border-radius: 25px;
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 14px;
   position: relative;
+  background-color: #e9fac8;
+  font-family: AAvantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 }
 
 article > div {
   display: flex;
   flex-direction: column;
+  font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 }
 
 form > article p {
   margin: 0;
+  font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 }
 
 form h3,
 form > * {
   margin: 0.3em 0;
+  font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 }
 
 form h3 {
   margin-top: 0;
+  font-family: AAvantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 }
 
 textarea {
-   font-family: inherit;
    font-size: inherit;
+   font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 }
 </style>

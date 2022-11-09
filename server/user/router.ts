@@ -29,6 +29,23 @@ router.get(
 );
 
 /**
+ * Get a user by their id. 
+ *
+ * @name GET /api/users/:id
+ *
+ * @return - currently logged in user, or null if not logged in
+ */
+ router.get(
+  '/:id?',
+  [],
+  async (req: Request, res: Response) => {
+    const user = await UserCollection.findOneByUserId(req.params.id);
+    const response = util.constructUserResponse(user);
+    res.status(200).json(response);
+  }
+);
+
+/**
  * Sign in user.
  *
  * @name POST /api/users/session

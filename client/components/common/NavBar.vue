@@ -47,11 +47,13 @@ nav {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    background-color: #c0eb75;
 }
 
 .title {
     font-size: 32px;
     margin: 0 5px;
+    font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 }
 
 img {
@@ -61,6 +63,7 @@ img {
 .left {
 	display: flex;
 	align-items: center;
+  font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 }
 
 .right {
@@ -69,6 +72,7 @@ img {
     gap: 16px;
     grid-auto-flow: column;
     align-items: center;
+    font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 }
 
 .right a {

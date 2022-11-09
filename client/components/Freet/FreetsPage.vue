@@ -21,17 +21,27 @@
         </h3>
       </article>
     </section>
-    <section>
+    <aside>
+      <section>
       <header>
         <div class="left">
           <h2>
             Viewing all circles
-            <span v-if="$store.state.filter">
-              by @{{ $store.state.filter }}
+            <span v-if="$store.state.circleFilter">
+              by @{{ $store.state.circleFilter }}
             </span>
           </h2>
         </div>
-      <section
+        <div class="right">
+          <GetCirclesForm
+            ref="getCirclesForm"
+            value="member"
+            button="🔄 Get Circles"
+          />
+        </div>
+      </header> 
+      <CreateCircleForm /> 
+      <article
         v-if="$store.state.circles.length"
       >
         <CircleComponent
@@ -39,20 +49,24 @@
           :key="circle.id"
           :circle="circle"
         />
-      </section>
+      </article>
       <article
         v-else
       >
-        <h3>No Circles found.</h3>
+      <h3>No Circles found.</h3>
       </article>
-        <div class="left">
-          <h2>
-            Viewing all freets
-            <span v-if="$store.state.filter">
-              by @{{ $store.state.filter }}
-            </span>
-          </h2>
-        </div>
+      </section>
+    </aside>
+    <section>
+      <header>
+      <div class="left">
+        <h2>
+          Viewing all freets
+          <span v-if="$store.state.filter">
+            by @{{ $store.state.filter }}
+          </span>
+        </h2>
+      </div>
         <div class="right">
           <GetFreetsForm
             ref="getFreetsForm"
@@ -60,14 +74,9 @@
             placeholder="🔍 Filter by author (optional)"
             button="🔄 Get freets"
           />
-          <GetCirclesForm
-            ref="getCirclesForm"
-            value="owner"
-            button="🔄 Get circles"
-          />
         </div>
       </header>
-      <section
+      <article
         v-if="$store.state.freets.length"
       >
         <FreetComponent
@@ -75,7 +84,7 @@
           :key="freet.id"
           :freet="freet"
         />
-      </section>
+      </article>
       <article
         v-else
       >
@@ -89,12 +98,16 @@
 import FreetComponent from '@/components/Freet/FreetComponent.vue';
 import CreateFreetForm from '@/components/Freet/CreateFreetForm.vue';
 import GetFreetsForm from '@/components/Freet/GetFreetsForm.vue';
+import CircleComponent from '@/components/Circle/CircleComponent.vue';
+import CreateCircleForm from '@/components/Circle/CreateCircleForm.vue';
+import GetCirclesForm from '@/components/Circle/GetCirclesForm.vue';
 
 export default {
   name: 'FreetPage',
-  components: {FreetComponent, GetFreetsForm, CreateFreetForm},
+  components: {FreetComponent, GetFreetsForm, CreateFreetForm, CircleComponent, CreateCircleForm, GetCirclesForm},
   mounted() {
     this.$refs.getFreetsForm.submit();
+    this.$refs.getCirclesForm.submit();
   }
 };
 </script>
@@ -103,6 +116,27 @@ export default {
 section {
   display: flex;
   flex-direction: column;
+  border: 0px solid #fff;
+  border-radius: 25px;
+  padding: 20px;
+  font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
+  margin: 10px;
+  background-color: #f4fce3;
+}
+
+article {
+  display: flex;
+  flex-direction: column;
+  border: 0px solid #fff;
+  border-radius: 25px;
+  padding: 20px;
+  font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
+  margin: 5px;
+}
+
+aside { 
+  float:right; 
+  font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 }
 
 header, header > * {
@@ -119,5 +153,6 @@ section .scrollbox {
   flex: 1 0 50vh;
   padding: 3%;
   overflow-y: scroll;
+  background-color: lightblue;
 }
 </style>

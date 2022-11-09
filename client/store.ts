@@ -14,6 +14,8 @@ const store = new Vuex.Store({
     username: null, // Username of the logged in user
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     circles: [], // All circles created in the app
+    circleFilter: null, // Username to filter shown circles (null = show those by this user)
+    curCircle: null, // The name of the current circle being viewed by the user
   },
   mutations: {
     alert(state, payload) {
@@ -61,13 +63,20 @@ const store = new Vuex.Store({
        */
       state.circles = circles;
     },
+    updateCircleFilter(state, filter) {
+      /**
+       * Update the stored circles filter to the specified one.
+       * @param filter - Username of the user to fitler circles by
+       */
+      state.circleFilter = filter;
+    },
     async refreshCircles(state) {
       /**
        * Request the server for the currently available circles.
        */
-      const url = state.filter ? `/api/users/${state.filter}/circles` : '/api/circles';
+      const url = '/api/circles';
       const res = await fetch(url).then(async r => r.json());
-      state.freets = res;
+      state.circles = res;
     }
   },
   // Store data across page refreshes, only discard on browser close

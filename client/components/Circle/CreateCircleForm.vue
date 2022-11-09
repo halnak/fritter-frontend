@@ -12,7 +12,7 @@ export default {
       method: 'POST',
       hasBody: true,
       fields: [
-        {name: 'name', owner: 'owner'}
+        {id: 'name', label: 'Name', value: ''}
       ],
       title: 'Create a circle',
       refreshCircles: true,

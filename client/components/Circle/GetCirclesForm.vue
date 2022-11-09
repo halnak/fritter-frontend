@@ -7,11 +7,11 @@ export default {
   name: 'GetCirclesForm',
   mixins: [InlineForm],
   data() {
-    return {value: this.$store.state.filter};
+    return {value: this.$store.state.circleFilter};
   },
   methods: {
     async submit() {
-      const url = this.value ? `/api/circles?owner=${this.value}` : '/api/circles';
+      const url = this.value ? `/api/circles?member=${this.value}` : '/api/circles';
       try {
         const r = await fetch(url);
         const res = await r.json();
@@ -19,18 +19,18 @@ export default {
           throw new Error(res.error);
         }
 
-        this.$store.commit('updateFilter', this.value);
+        this.$store.commit('updateCircleFilter', this.value);
         this.$store.commit('updateCircles', res);
       } catch (e) {
-        if (this.value === this.$store.state.filter) {
+        if (this.value === this.$store.state.circleFilter) {
           // This section triggers if you filter to a user but they
           // change their username when you refresh
-          this.$store.commit('updateFilter', null);
-          this.value = ''; // Clear filter to show all users' freets
+          this.$store.commit('updateCircleFilter', null);
+          this.value = ''; // Clear filter to show all circles
           this.$store.commit('refreshCircles');
         } else {
           // Otherwise reset to previous fitler
-          this.value = this.$store.state.filter;
+          this.value = this.$store.state.circleFilter;
         }
 
         this.$set(this.alerts, e, 'error');

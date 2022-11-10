@@ -19,16 +19,16 @@ class CircleCollection {
    * Add a new Circle
    *
    * @param {string} name - The name of the circle
-   * @param {{ type: Types.ObjectId, ref: 'User' }} owner - The username of the owner
+   * @param {{ type: Types.ObjectId, ref: 'User' }} ownerID - The username or id of the owner
    * @return {Promise<HydratedDocument<Circle>>} - The newly created user
    */
   static async addOne(name: string, ownerId: Types.ObjectId | string): Promise<HydratedDocument<Circle>> {
     const owner = await UserCollection.findOneByUserId(ownerId);
-    const members = [owner._id]; // owner is first member of circle
+    const members:Array<String> = [owner.username.toString()]; // owner is first member of circle
     // const freets: Array<{ type: Types.ObjectId, ref: 'Freet' }> = [];
     const circle = new CircleModel({
       name: name, 
-      owner: owner._id, 
+      owner: owner.username, 
       members: members, 
       freets: []
     });
@@ -84,7 +84,7 @@ class CircleCollection {
    */
      static async findAllByMember(username: string): Promise<Array<HydratedDocument<Circle>>> {
       const member = await UserCollection.findOneByUsername(username);
-      return CircleModel.find({members: {$in: [member._id]}})
+      return CircleModel.find({members: {$in: [member.username]}})
         .populate('owner')
         .populate('members')
         .populate('freets');
@@ -101,8 +101,8 @@ class CircleCollection {
     const user = await UserModel.findOne({_id: userId});
     const circle = await this.findOneByCircleId(circleId);
 
-    const members_arr: Array<Types.ObjectId> = circle.members;
-    return members_arr.includes(user._id);
+    const members_arr: Array<String> = circle.members;
+    return members_arr.includes(user.username);
   }
 
   /**
@@ -131,7 +131,7 @@ class CircleCollection {
     const circle = await CircleModel.findOne({_id: circleId});
     const user = await UserModel.findOne({_id: userId});
     if (!this.isMember(circleId, userId)){
-      await CircleModel.updateOne({_id: circleId}, {$addToSet: {members: user._id}});
+      await CircleModel.updateOne({_id: circleId}, {$addToSet: {members: user.username}});
     }
     await circle.save();
     return circle;
@@ -148,7 +148,7 @@ class CircleCollection {
     const circle = await CircleModel.findOne({_id: circleId});
     const user = await UserModel.findOne({_id: userId});
     if (this.isMember(circleId, userId)){
-      await CircleModel.updateOne({_id: circleId}, {$pull: {members: user._id}});
+      await CircleModel.updateOne({_id: circleId}, {$pull: {members: user.username}});
     }
     await circle.save();
     return circle;

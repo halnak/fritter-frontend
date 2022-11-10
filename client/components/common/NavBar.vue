@@ -48,6 +48,7 @@ nav {
     align-items: center;
     position: relative;
     background-color: #c0eb75;
+    z-index: 1;
 }
 
 .title {

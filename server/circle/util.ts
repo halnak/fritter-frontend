@@ -1,6 +1,8 @@
 import type {HydratedDocument} from 'mongoose';
 import moment from 'moment';
 import type {Circle} from './model';
+import UserCollection from '../user/collection';
+import { validate } from 'uuid';
 
 type CircleResponse = {
   _id: string;
@@ -23,6 +25,10 @@ const constructCircleResponse = (circle: HydratedDocument<Circle>): CircleRespon
       versionKey: false // Cosmetics; prevents returning of __v property
     })
   };
+  // var memberStr = '';
+  // for (const m of circleCopy.members){
+  //   memberStr += m + '\n';
+  // }
   const m: Array<string> = circleCopy.members.map(function(val){
     return val.toString();
   });
@@ -32,8 +38,8 @@ const constructCircleResponse = (circle: HydratedDocument<Circle>): CircleRespon
   return {
     ...circleCopy,
     _id: circleCopy._id.toString(),
-    name: circleCopy.name.toString(),
-    owner: circleCopy.owner._id.toString(),
+    name: circleCopy.name,
+    owner: circleCopy.owner,
     members: m,
     freets: f
   };

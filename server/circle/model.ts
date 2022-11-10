@@ -9,16 +9,16 @@ import type {Freet} from '../freet/model';
  */
 
 // Type definition for Circle on the backend
-export type GenericCircle<U, P> = {
+export type GenericCircle<P> = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   name: string; 
-  owner: U; 
-  members: Array<U>;
+  owner: string; 
+  members: Array<string>;
   freets: Array<P>;
 };
 
-export type Circle = GenericCircle<Types.ObjectId, Types.ObjectId>;
-export type PopulatedCircle = GenericCircle<User, Freet>; 
+export type Circle = GenericCircle<Types.ObjectId>;
+export type PopulatedCircle = GenericCircle<Freet>; 
 
 // Mongoose schema definition for interfacing with a MongoDB table
 // Users stored in this table will have these fields, with the
@@ -31,15 +31,13 @@ const CircleSchema = new Schema({
   },
   // User ID of the owner
   owner: {
-    type: Schema.Types.ObjectId,
+    type: String,
     required: true,
-    ref: 'User'
   },
   // Members of the circle
   members: {
-    type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    type: Array<String>,
     required: true,
-    ref: 'User'
   },
   // Freets posted to this circle
   freets: {

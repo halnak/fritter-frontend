@@ -5,22 +5,13 @@
     class="circle"
   >
     <header>
-      <h3 class="owner">
-        Owner: @{{ circle.owner }}
-      </h3>
       <h3 class="name">
-      <textarea
-        v-if="editing"
-        class="name"
-        :value="draft"
-        @input="draft = $event.target.value"
-      />
-      <p
-        v-else
-        class="name"
-      >
+      <p>
         {{ circle.name }}
       </p>
+      </h3>
+      <h3 class="owner">
+        Owner: @{{ circle.owner }}
       </h3>
       <div
         v-if="$store.state.username === circle.owner"
@@ -54,12 +45,22 @@
         :value="member"
         @input="member = $event.target.value"
       />
-        <button @click="addMember">
-          Add Member
-        </button>
-        <button @click="removeMember">
-          Remove Member
-        </button>
+      <p
+        v-else
+        class="members"
+      >
+        {{ }}
+      </p>
+      <button 
+        v-if="editing"
+        @click="addMember">
+        Add Member
+      </button>
+      <button 
+        v-if="editing"
+        @click="removeMember">
+        Remove Member
+      </button>
     </header>
     <p class="members">
       Members:
@@ -94,26 +95,50 @@ export default {
       editing: false, // Whether or not the circle membership is being edited
       adding: false, // If editing, whether a member is being added or removed from the circle
       alerts: {}, // Displays success/error messages encountered during circle modification
-      member: null, // the member to add or remove, if applicable 
-      temp: null, //placeholder for extra use
+      member: null, // The member to add or remove, if applicable 
     };
   },
   methods: {
-    addMember() {
+    startEditing() {
       /**
        * Enables edit mode on this circle.
        */
-      this.editing = true; // Keeps track of if a freet is being edited
+      this.editing = true;
+      this.member = '';
+    },
+    addMember() {
+      /**
+       * Add member to this circle. 
+       */
       this.adding = true; // Keeps track of whether a member is being added or removed while in edit mode
-      this.member = member;
+
+      const params = {
+        method: 'PUT',
+        message: 'Successfully edited circle!',
+        body: JSON.stringify({id: circle.id, member: this.member}),
+        callback: () => {
+          this.$set(this.alerts, params.message, 'success');
+          setTimeout(() => this.$delete(this.alerts, params.message), 3000);
+        }
+      };
+      this.request(params);
     },
     removeMember() {
       /**
-       * Enables edit mode on this circle.
+       * Remove member from this circle. 
        */
-      this.editing = true; // Keeps track of if a freet is being edited
       this.adding = false; // Keeps track of whether a member is being added or removed while in edit mode
-      this.member = member;
+
+      const params = {
+        method: 'PUT',
+        message: 'Successfully edited circle!',
+        body: JSON.stringify({id: circle.id, member: this.member}),
+        callback: () => {
+          this.$set(this.alerts, params.message, 'success');
+          setTimeout(() => this.$delete(this.alerts, params.message), 3000);
+        }
+      };
+      this.request(params);
     },
     stopEditing() {
       /**
@@ -121,6 +146,7 @@ export default {
        */
       this.editing = false;
       this.adding = false;
+      this.member = null;
     },
     deleteCircle() {
       /**
@@ -135,36 +161,6 @@ export default {
         }
       };
       this.request(params);
-    },
-    submitEdit() {
-      /**
-       * Updates circle to have the new membership. 
-       */
-      const params = {
-        method: 'PUT',
-        message: 'Successfully edited circle!',
-        body: JSON.stringify({id: $store.state.username, member: this.member}),
-        callback: () => {
-          this.$set(this.alerts, params.message, 'success');
-          setTimeout(() => this.$delete(this.alerts, params.message), 3000);
-        }
-      };
-      this.request(params);
-    },
-    getUsername(id) {
-      /**
-       * Gets the username of a user form their ID
-       */
-       this.temp = id;
-      const params = {
-        method: 'GET',
-        message: 'Successfully retrieved username!',
-        callback: () => {
-          this.$set(this.alerts, params.message, 'success');
-          setTimeout(() => this.$delete(this.alerts, params.message), 3000);
-        }
-      };
-      return this.userRequest(params);
     },
     async request(params) {
       /**
@@ -181,7 +177,13 @@ export default {
       }
 
       try {
-        const r = await fetch(`/api/circles/${this.circle._id}`, options);
+        let str;
+        if (this.adding){
+          str = `/api/circles/addMember`;
+        }else{
+          str = `/api/circles/removeMember`;
+        }
+        const r = await fetch(str, options);
         if (!r.ok) {
           const res = await r.json();
           throw new Error(res.error);
@@ -195,34 +197,6 @@ export default {
         this.$set(this.alerts, e, 'error');
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
-    },
-    async userRequest(params) {
-      /**
-       * Submits a request to the user's endpoint
-       * @param params - Options for the request
-       * @param params.body - Body for the request, if it exists
-       * @param params.callback - Function to run if the the request succeeds
-       */
-      const options = {
-        method: params.method, headers: {'Content-Type': 'application/json'}
-      };
-      if (params.body) {
-        options.body = params.body;
-      }
-
-      try {
-        const r = await fetch(`/api/users/${this.temp}`, options);
-        if (!r.ok) {
-          const res = await r.json();
-          throw new Error(res.error);
-        }
-
-        params.callback();
-      } catch (e) {
-        this.$set(this.alerts, e, 'error');
-        setTimeout(() => this.$delete(this.alerts, e), 3000);
-      }
-      this.temp = await res.username;
     }
   }
 };

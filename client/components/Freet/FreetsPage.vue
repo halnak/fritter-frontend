@@ -2,6 +2,15 @@
 
 <template>
   <main>
+    <div class="container-fluid h-100">
+    <div class="sidenav">
+      <router-link
+        to="/"
+      >
+        Home
+      </router-link>
+    </div>
+    </div>
     <section v-if="$store.state.username">
       <header>
         <h2>Welcome @{{ $store.state.username }}</h2>
@@ -113,6 +122,34 @@ export default {
 </script>
 
 <style scoped>
+.sidenav {
+  height: 100%;
+  width: 160px; 
+  position: fixed; 
+  z-index: 0; 
+  top: 0; 
+  left: 0;
+  float: left;
+  background-color: #fff;
+  overflow-x: hidden; 
+  background-color: #f4fce3;
+  font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
+  padding-top: 50px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  margin: 25px;
+}
+
+.sidenav a:hover {
+  color: #000;
+}
+
 section {
   display: flex;
   flex-direction: column;
@@ -122,6 +159,8 @@ section {
   font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
   margin: 10px;
   background-color: #f4fce3;
+  margin-left: 90px;
+  margin-right: 10px;
 }
 
 article {
